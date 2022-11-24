@@ -6,7 +6,7 @@ import sys
 sys.path.append(os.path.realpath('.'))
 from WeChatPYAPI import WeChatPYApi
 import requests
-URL='http://api.qingyunke.com/api.php?key=free&appid=0&'
+URL='http://api.qingyunke.com/api.php?key=free&appid=0&msg='
 # 当前目录路径
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 logging.basicConfig(level=logging.INFO)  # 日志器
@@ -58,14 +58,13 @@ def main():
         msg = msg_queue.get()
 
         # 收款
-        if msg["wx_id"] == 'wxid_etrmnvy72wja22':
-            text=msg["content"]
-            url=URL+text
+        if msg['msg_type'] == 1:
+            url=URL+msg['content']
             re= requests.get(url)
             r=re.json()
             w.send_text(
-                self_wx=me["wx_id"],
-                to_wx='wxid_etrmnvy72wja22',
+                self_wx=me['wx_id'],
+                to_wx=msg['wx_id'],
                 msg=r["content"]
             )
 if __name__ == '__main__':
